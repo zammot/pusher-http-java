@@ -276,28 +276,28 @@ public class Pusher {
      * Note that if you do not wish to create classes specifically for the purpose of specifying
      * the message payload, use Map&lt;String, Object&gt;. These maps will nest just fine.
      */
-    public Result trigger(final String channel, final String eventName, final Object data) {
+    public TriggerResult trigger(final String channel, final String eventName, final Object data) {
         return trigger(channel, eventName, data, null);
     }
 
     /**
      * Publish identical messages to multiple channels.
      */
-    public Result trigger(final List<String> channels, final String eventName, final Object data) {
+    public TriggerResult trigger(final List<String> channels, final String eventName, final Object data) {
         return trigger(channels, eventName, data, null);
     }
 
     /**
      * Publish a message to a single channel, excluding the specified socketId from receiving the message.
      */
-    public Result trigger(final String channel, final String eventName, final Object data, final String socketId) {
+    public TriggerResult trigger(final String channel, final String eventName, final Object data, final String socketId) {
         return trigger(Collections.singletonList(channel), eventName, data, socketId);
     }
 
     /**
      * Publish identical messages to multiple channels, excluding the specified socketId from receiving the message.
      */
-    public Result trigger(final List<String> channels, final String eventName, final Object data, final String socketId) {
+    public TriggerResult trigger(final List<String> channels, final String eventName, final Object data, final String socketId) {
         Prerequisites.nonNull("channels", channels);
         Prerequisites.nonNull("eventName", eventName);
         Prerequisites.nonNull("data", data);
@@ -306,7 +306,7 @@ public class Pusher {
 
         final String body = BODY_SERIALISER.toJson(new TriggerData(channels, eventName, serialise(data), socketId));
 
-        return post("/events", body);
+        return new TriggerResult(post("/events", body), dataMarshaller);
     }
 
     /**
