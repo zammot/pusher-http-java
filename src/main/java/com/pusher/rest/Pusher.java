@@ -307,7 +307,7 @@ public class Pusher {
 
         final String body = BODY_SERIALISER.toJson(new TriggerData(channels, eventName, serialise(data), socketId));
 
-        return new TriggerResult(post("/events", body));
+        return TriggerResult.fromResult(post("/events", body));
     }
 
     /**
